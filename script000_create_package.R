@@ -7,6 +7,11 @@ library(usethis)
 # Crea la estructura básica del paquete (reemplaza "miPaquete" con el nombre de tu paquete)
 create_package("Rscience2")
 
+dir.create("inst")
+dir.create("inst/shiny")
+dir.create("inst/shiny/myApp")
+dir.create("inst/rstudio")
+
 
 # Configura el uso de roxygen2 para documentación
 usethis::use_roxygen_md()

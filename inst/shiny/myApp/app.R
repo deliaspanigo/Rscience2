@@ -1,136 +1,294 @@
+# Dashboard con menú lateral con efectos visuales avanzados
 library(shiny)
 library(bslib)
-library(shinyjs)
-library(quarto)
-library(shinyjs)
-library(plotly)
-library(htmlwidgets)
-library(knitr)
+library(fontawesome) # Usaremos el paquete fontawesome de R
+library("Rscience.import")
+library("Rscience.GeneralLM")
 
-
-ui <- page_fluid( # Cambiado de page_sidebar a page_fluid para más flexibilidad
-  #theme = bs_theme(version = 5, bootswatch = "minty"),
-  theme = bs_theme(version = 5),
-  
-  # Necesario para manipular clases de CSS
-  useShinyjs(),
-  
-  # CSS para botón verde chillón y para corregir el problema de los cards
-  tags$head(
-    tags$style("
-      .btn-neon-green {
-        background-color: #39ff14 !important; /* Verde neón chillón */
-        color: #000000 !important;
-        border-color: #32cd32 !important;
-        font-weight: bold !important;
-        text-shadow: 0 0 5px rgba(0,255,0,0.5) !important;
-        box-shadow: 0 0 8px rgba(57,255,20,0.8) !important;
-      }
-
-      /* Estilos para evitar que los cards se contraigan */
-      .card {
-        height: auto !important;
-        overflow: visible !important;
-      }
-
-      .card-body {
-        height: auto !important;
-        overflow: visible !important;
-        min-height: fit-content !important;
-      }
-
-      /* Estilo específico para el contenedor del Quarto */
-      #quarto_doc-contenedor_html {
-        height: auto !important;
-        overflow: visible !important;
-        max-height: none !important;
-      }
-    "),
-    tags$style(HTML("
-        /* Estilo para opciones seleccionadas en radioButtons - colores del tema minty */
-        .radio input[type='radio']:checked + span {
-          font-weight: bold;
-          background-color: #78c2ad; /* Color principal del tema minty */
-          color: black;
-          border-radius: 4px;
-          padding: 2px 8px;
-        }
-
-        /* Estilo para efecto hover en las opciones de radioButtons */
-        .radio:hover {
-          background-color: #5eb69d; /* Versión más oscura del color principal de minty */
-          color: white;
-          border-radius: 4px;
-          transition: all 0.2s;
-        }
-
-        /* Enfoque y estado activo consistente con minty */
-        .radio:focus-within {
-          box-shadow: 0 0 0 0.25rem rgba(120, 194, 173, 0.25);
-          outline: 0;
-        }
-      "))
+ui <- page_sidebar(
+  theme = bs_theme(
+    bg = "#fff3e6", 
+    fg = "#3d2c20",
+    primary = "#e85d04",
+    secondary = "#f48c06",
+    font_scale = 0.9
   ),
   
-  # Layout con dos columnas - una para la barra lateral y otra para el contenido principal
-  layout_sidebar(
-    sidebar = sidebar(
-      p("HOLA", class = "text-center fs-4 fw-bold py-4")
+  # Encabezado
+  title = span(
+    "Rscience",
+    class = "my-custom-title"  # Añadimos una clase personalizada al título
+  ),
+  
+  # Menú lateral con efectos visuales
+  sidebar = sidebar(
+    title = "Control Panel",
+    bg = "#ffe1c2",
+    fg = "#3d2c20",
+    width = 250,
+    
+    # JavaScript para efectos (sin dependencias externas)
+    tags$script(HTML("
+      $(document).ready(function() {
+        $('#btn_primera').addClass('active');
+        
+        $('.btn-sidebar').click(function() {
+          $('.btn-sidebar').removeClass('active');
+          $(this).addClass('active');
+          
+          // Efecto de pulso al hacer clic
+          $(this).addClass('pulse');
+          setTimeout(function() {
+            $('.btn-sidebar').removeClass('pulse');
+          }, 500);
+        });
+      });
+    ")),
+    
+    # Perfil de usuario
+    div(
+      class = "user-profile",
+      div(class = "avatar"),
+      div(
+        class = "user-info",
+        h5("Usuario Demo", style = "margin: 0; font-weight: 500;"),
+        p("Admin", style = "margin: 0; font-size: 0.8rem; opacity: 0.7;")
+      )
     ),
     
-    # Contenido principal organizado en columnas para mantener los cards separados
+    # Separador
+    div(class = "separator"),
+    
+    # Título de navegación
+    p("NAVEGACIÓN", style = "font-size: 0.7rem; padding: 0 15px; font-weight: 600; color: #9a4012;"),
+    
+    # Botones de navegación usando fontawesome de R
+    actionButton(
+      "btn_primera", 
+      span(fa_i("home"), span("Welcome", style="margin-left: 12px;")), 
+      width = "100%",
+      class = "btn-sidebar"
+    ),
+    
+    actionButton(
+      "btn_segunda", 
+      span(fa_i("chart-line"), span("Rscience", style="margin-left: 12px;")), 
+      width = "100%",
+      class = "btn-sidebar"
+    ),
+    
+    # Espacio flexible
+    div(style = "flex-grow: 1;"),
+    
+    # Pie de página
     div(
-      # Encabezado con botones en una fila
-      card(
-        card_body(
-          div(
-            class = "d-flex justify-content-start gap-2 mb-3",
-            "22222222222222222",br(),
-            
-            Rscience.import::MASTER_module_import_ui(id = "MASTER_import")
-            # Uso de los módulos para los botones
-            #datasetSelectorUI("selector_datos"),
-            # datasetSelectorUI2("selector_datos2"),
-            # toolSelectorUI("selector_tools"),
-            # variableSelectorUI("selector_variables"), # Nuevo botón para seleccionar variables
-            # resetButtonUI("reset_button"),
-            # playButtonUI("play_button")
-          )
-        )
-      ),
+      class = "sidebar-footer",
+      tags$a(fa_i("github"), href = "#", class = "social-icon"),
+      tags$a(fa_i("linkedin"), href = "#", class = "social-icon"),
+      p("© 2023", style = "text-align: center; font-size: 0.8rem; margin-top: 10px; opacity: 0.7;")
+    ),
+    
+    # Estilos CSS (sin importar de CDN)
+    tags$style(HTML("
+      .user-profile {
+        display: flex;
+        align-items: center;
+        padding: 15px;
+        margin: 15px 10px;
+        background: linear-gradient(145deg, #ffdbb0, #ffe7c5);
+        border-radius: 12px;
+        box-shadow: 5px 5px 10px #d9c0a3, -5px -5px 10px #fff8eb;
+      }
       
-      # uiOutput("show_dev"),
+      .avatar {
+        width: 40px;
+        height: 40px;
+        border-radius: 10px;
+        background: linear-gradient(135deg, #e85d04, #f48c06);
+        margin-right: 12px;
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+      }
       
+      .avatar::after {
+        content: 'U';
+        font-weight: bold;
+      }
       
-      # Panel de resultados
-      card(
-        card_header("Resultados"),
-        card_body(
-          # Mensaje de estado
-          # uiOutput("mensaje_seleccion")
-          # Mostrar datos simple
-          #tableOutput("tabla_datos"),
-        )
-      ),
+      .user-info {
+        flex: 1;
+      }
       
-      # Card separado para Quarto
-      div(
-        style = "margin-top: 20px; width: 100%;",
-        # quartoRendererUI(id = "quarto_doc")
-        "HOLA"
-      )
-    )
-  )
+      .separator {
+        height: 2px;
+        background: linear-gradient(90deg, #ffe1c200, #e85d0450, #ffe1c200);
+        margin: 15px 0;
+      }
+      
+      .btn-sidebar {
+        display: flex;
+        align-items: center;
+        background: linear-gradient(145deg, #ffdbb0, #ffe7c5);
+        border: none;
+        color: #3d2c20;
+        text-align: left;
+        padding: 12px 15px;
+        margin: 8px 10px;
+        border-radius: 10px;
+        box-shadow: 3px 3px 6px #d9c0a3, -3px -3px 6px #fff8eb;
+        transition: all 0.3s;
+      }
+      
+      .btn-sidebar i {
+        margin-right: 12px;
+        font-size: 1.1rem;
+        width: 20px;
+        text-align: center;
+      }
+      
+      .btn-sidebar:hover {
+        transform: translateX(5px);
+      }
+      
+      .btn-sidebar.active {
+        background: linear-gradient(135deg, #e85d04, #f48c06);
+        box-shadow: inset 3px 3px 6px #dc580380, inset -3px -3px 6px #e67e0780;
+        color: white;
+      }
+      
+      .btn-sidebar.pulse {
+        animation: pulse 0.5s;
+      }
+      
+      @keyframes pulse {
+        0% { transform: scale(1); }
+        50% { transform: scale(0.98); }
+        100% { transform: scale(1); }
+      }
+      
+      .sidebar-footer {
+        padding: 15px;
+        text-align: center;
+        margin-top: 10px;
+      }
+      
+      .social-icon {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 32px;
+        height: 32px;
+        background: linear-gradient(145deg, #ffdbb0, #ffe7c5);
+        border-radius: 8px;
+        margin: 0 5px;
+        color: #3d2c20;
+        box-shadow: 2px 2px 5px #d9c0a3, -2px -2px 5px #fff8eb;
+        transition: all 0.3s;
+      }
+      
+      .social-icon:hover {
+        background: linear-gradient(135deg, #e85d04, #f48c06);
+        transform: translateY(-3px);
+        color: white;
+      }
+      
+      .card-header.bg-primary {
+        background-color: #e85d04 !important;
+      }
+      
+      .card-header.bg-secondary {
+        background-color: #f48c06 !important;
+      }
+    "))
+  ),
+  
+  # Contenido principal con efecto de transición
+  tags$style(HTML("
+    #contenido_dinamico .card {
+      transition: all 0.4s;
+      animation: fadeIn 0.5s;
+      box-shadow: 0 6px 12px rgba(232, 93, 4, 0.15);
+      border: none;
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  ")),
+  uiOutput("contenido_dinamico")
 )
 
-# Definir el servidor
 server <- function(input, output, session) {
-  # Valores predeterminados para reseteo
+  # Variable reactiva para rastrear la página activa
+  # Nota: si cambias esto, tambien tenes que cambiar el javascript para
+  #  que tome el cambio.
   
-  output_list_database <- Rscience.import::MASTER_module_import_server(id = "MASTER_import")
+  Rscience.GeneralLM::MASTER_module_fixed_anova_1_way_server(id = "super")
+  
+  active_page <- reactiveVal("primera")
+  
+  # Observar clics en botones
+  observeEvent(input$btn_primera, {
+    active_page("primera")
+  })
+  
+  observeEvent(input$btn_segunda, {
+    active_page("segunda")
+  })
   
   
+  
+  output$la_primera <- renderUI({
+    card(
+      height = 200,
+      card_header(
+        "Dashboard Principal",
+        class = "bg-primary text-white"
+      ),
+      card_body(
+        div(
+          style = "display: flex; justify-content: center; align-items: center; height: 100%;",
+          h3("Bienvenido al Dashboard")
+        )
+      )
+    )
+  })
+  
+  output$la_segunda <- renderUI({
+    div(
+    card(
+      height = 200,
+      card_header(
+        "Análisis de Datos",
+        class = "bg-secondary text-white"
+      ),
+      card_body(
+        div(
+          style = "display: flex; justify-content: center; align-items: center; height: 100%;",
+          h3("Visualización de Análisis"),
+          "",
+          ""
+        )
+      )
+    ),
+    Rscience.GeneralLM::MASTER_module_fixed_anova_1_way_ui(id = "super")
+    )
+  })
+  # Contenido dinámico
+  
+  
+  output$contenido_dinamico <- renderUI({
+    
+    switch (active_page(),
+            "primera" = uiOutput("la_primera"),
+            "segunda" = uiOutput("la_segunda")
+    )
+  })
 }
 
-# Ejecutar la aplicación
-shinyApp(ui = ui, server = server)
+# Aplicación Shiny
+shinyApp(ui, server)
