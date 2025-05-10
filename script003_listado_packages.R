@@ -8,6 +8,8 @@ usethis::use_package("openxlsx")
 usethis::use_package("colourpicker")
 usethis::use_package("Rscience.import")
 usethis::use_package("Rscience.GeneralLM")
+usethis::use_package("shinyjs")
+usethis::use_package("agricolae")
 
 usethis::use_package("dplyr")
 usethis::use_package("ggplot2")

@@ -1,5 +1,7 @@
 # Dashboard con menú lateral con efectos visuales avanzados
 library(shiny)
+library(shinyjs)
+
 library(bslib)
 library(fontawesome) # Usaremos el paquete fontawesome de R
 library("Rscience.import")

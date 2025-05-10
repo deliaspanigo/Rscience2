@@ -23,6 +23,7 @@ devtools::document()
 
 remotes::install_github("deliaspanigo/Rscience.import")
 remotes::install_github("deliaspanigo/Rscience.GeneralLM")
+devtools::install()
 
 # Instalar nuevamente
 devtools::install()
@@ -30,5 +31,7 @@ devtools::install()
 library(Rscience2)
 Rscience2::run_app()
 
+library(Rscience.GeneralLM)
+Rscience.GeneralLM::run_app()
 
 remotes::install_github("deliaspanigo/Rscience.import")
