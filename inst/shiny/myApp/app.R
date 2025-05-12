@@ -262,21 +262,21 @@ server <- function(input, output, session) {
   
   output$la_segunda <- renderUI({
     div(
-    card(
-      height = 200,
-      card_header(
-        "Análisis de Datos",
-        class = "bg-secondary text-white"
-      ),
-      card_body(
-        div(
-          style = "display: flex; justify-content: center; align-items: center; height: 100%;",
-          h3("Visualización de Análisis"),
-          "",
-          ""
-        )
-      )
-    ),
+    # card(
+    #   height = 200,
+    #   card_header(
+    #     "Análisis de Datos",
+    #     class = "bg-secondary text-white"
+    #   ),
+    #   card_body(
+    #     div(
+    #       style = "display: flex; justify-content: center; align-items: center; height: 100%;",
+    #       h3("Visualización de Análisis"),
+    #       "",
+    #       ""
+    #     )
+    #   )
+    # ),
     Rscience.GeneralLM::MASTER_module_fixed_anova_1_way_ui(id = "super")
     )
   })
