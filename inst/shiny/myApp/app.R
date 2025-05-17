@@ -13,6 +13,7 @@ ui <- page_sidebar(
     fg = "#3d2c20",
     primary = "#e85d04",
     secondary = "#f48c06",
+    success = "#198754",
     font_scale = 0.9
   ),
   
@@ -46,6 +47,7 @@ ui <- page_sidebar(
         });
       });
     ")),
+    
     
     # Perfil de usuario
     div(
@@ -89,6 +91,7 @@ ui <- page_sidebar(
       tags$a(fa_i("linkedin"), href = "#", class = "social-icon"),
       p("© 2023", style = "text-align: center; font-size: 0.8rem; margin-top: 10px; opacity: 0.7;")
     ),
+    
     
     # Estilos CSS (sin importar de CDN)
     tags$style(HTML("
@@ -221,6 +224,7 @@ ui <- page_sidebar(
       to { opacity: 1; transform: translateY(0); }
     }
   ")),
+  
   uiOutput("contenido_dinamico")
 )
 
@@ -229,7 +233,8 @@ server <- function(input, output, session) {
   # Nota: si cambias esto, tambien tenes que cambiar el javascript para
   #  que tome el cambio.
   
-  Rscience.GeneralLM::MASTER_module_fixed_anova_1_way_server(id = "super")
+  Rscience.GeneralLM::MASTER_module_Rscience_Main_server(id = "MASTER_MAIN")
+  Rscience.GeneralLM::MASTER_module_fixed_anova_1_way_server(id = "super", show_dev = FALSE)
   
   active_page <- reactiveVal("primera")
   
@@ -277,6 +282,7 @@ server <- function(input, output, session) {
     #     )
     #   )
     # ),
+    Rscience.GeneralLM::MASTER_module_Rscience_Main_ui(id = "MASTER_MAIN"),
     Rscience.GeneralLM::MASTER_module_fixed_anova_1_way_ui(id = "super")
     )
   })

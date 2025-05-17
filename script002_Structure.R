@@ -12,6 +12,7 @@ devtools::install()
 # Desinstalar el paquete
 remove.packages("Rscience2")
 remove.packages("Rscience.import")
+remove.packages("Rscience.menu")
 remove.packages("Rscience.GeneralLM")
 
 # Limpiar el caché de devtools
@@ -22,6 +23,7 @@ devtools::document()
 
 
 remotes::install_github("deliaspanigo/Rscience.import")
+remotes::install_github("deliaspanigo/Rscience.menu")
 remotes::install_github("deliaspanigo/Rscience.GeneralLM")
 devtools::install()
 
@@ -33,5 +35,8 @@ Rscience2::run_app()
 
 library(Rscience2)
 Rscience2::run_app()
+
+library(Rscience.GeneralLM)
+Rscience.GeneralLM::run_app()
 
 remotes::install_github("deliaspanigo/Rscience.import")
