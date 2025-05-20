@@ -234,7 +234,7 @@ server <- function(input, output, session) {
   #  que tome el cambio.
   
   Rscience.GeneralLM::MASTER_module_Rscience_Main_server(id = "MASTER_MAIN")
-  Rscience.GeneralLM::MASTER_module_fixed_anova_1_way_server(id = "super", show_dev = FALSE)
+  # Rscience.GeneralLM::MASTER_module_fixed_anova_1_way_server(id = "super", show_dev = FALSE)
   
   active_page <- reactiveVal("primera")
   
@@ -283,7 +283,7 @@ server <- function(input, output, session) {
     #   )
     # ),
     Rscience.GeneralLM::MASTER_module_Rscience_Main_ui(id = "MASTER_MAIN"),
-    Rscience.GeneralLM::MASTER_module_fixed_anova_1_way_ui(id = "super")
+    # Rscience.GeneralLM::MASTER_module_fixed_anova_1_way_ui(id = "super")
     )
   })
   # Contenido dinámico

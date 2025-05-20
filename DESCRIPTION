@@ -17,6 +17,7 @@ Imports:
     purrr,
     Rscience.GeneralLM,
     Rscience.import,
+    Rscience.menu,
     shiny,
     shinyjs,
     usethis
