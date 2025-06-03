@@ -8,9 +8,6 @@ library(fontawesome) # Usaremos el paquete fontawesome de R
 library("Rscience.import")
 library("Rscience.GeneralLM")
 
-the_folder <- system.file("images", package = "Rscience2")
-addResourcePath("www", the_folder)
-
 ui <- page_sidebar(
   useShinyjs(),
   theme = bs_theme(
@@ -24,37 +21,18 @@ ui <- page_sidebar(
   
   # Encabezado
   title = span(
-    tags$span("Rscience", style = "font-size: 24px; font-weight: bold;"),
-    class = "my-custom-title",  # Añadimos una clase personalizada al título
-    tags$img(src = "www/logo_01_unc_master.png", height = "30px"),  # Imagen
-    tags$img(src = "www/logo_02_fcefyn_master.png", height = "30px"),  # Imagen
-    tags$img(src = "www/logo_03_efadoc_master.png", height = "30px"),  # Imagen
-    tags$img(src = "www/logo_04_rscience_master.png", height = "30px"),  # Imagen,
-    tags$img(src = "www/logo_05_UNT_master.png", height = "30px"),  # Imagen
-    tags$img(src = "www/logo_06_CONICET_master.png", height = "30px"),  # Imagen
-    tags$img(src = "www/logo_07_GULICH_master.png", height = "30px"),
-    tags$img(src = "www/logo_08_NASA_master.png", height = "30px"),
-    tags$img(src = "www/logo_09_UTN_master.png", height = "30px"),
-    tags$img(src = "www/logo_10_INTA_master.png", height = "30px"),
-    tags$img(src = "www/logo_11_CONAE_master.png", height = "30px"),
-    tags$img(src = "www/logo_12_YPF_master.png", height = "30px"),
-    tags$img(src = "www/logo_13_GOOGLE_master.png", height = "30px"),
-    tags$img(src = "www/logo_14_OMS_master.png", height = "30px")
-    
-    
-    
+    tags$h1("Rscience", style = "font-weight: bold;"),
+    class = "my-custom-title"  # Añadimos una clase personalizada al título
   ),
   
   # Menú lateral con efectos visuales
   sidebar = sidebar(
-    title =     tags$h1("Control Panel", style = "font-weight: bold;"),
+    title = "Control Panel",
     id = "el_side",
     bg = "#ffe1c2",
     fg = "#3d2c20",
     width = 250,
     open = "open",
-    # style = "overflow-y: auto; height: 100%;",
-    
     # JavaScript para efectos (sin dependencias externas)
     tags$script(HTML("
       $(document).ready(function() {
@@ -112,9 +90,8 @@ ui <- page_sidebar(
     # Pie de página
     div(
       class = "sidebar-footer",
-      tags$a(fa_i("github"), href = "https://github.com/deliaspanigo/Rscience2", class = "social-icon"),
-      tags$a(fa_i("linkedin"), href = "https://github.com/deliaspanigo/Rscience2", class = "social-icon"),
-      tags$a(fa_i("coffee"), href = "https://github.com/deliaspanigo/Rscience2", class = "social-icon"),
+      tags$a(fa_i("github"), href = "#", class = "social-icon"),
+      tags$a(fa_i("linkedin"), href = "#", class = "social-icon"),
       p("© 2025", style = "text-align: center; font-size: 0.8rem; margin-top: 10px; opacity: 0.7;")
     ),
     
@@ -185,11 +162,10 @@ ui <- page_sidebar(
       }
       
       .btn-sidebar.active {
-        background: linear-gradient(135deg, #039be5, #29b6f6); /* tonos azules y celestes */
-        box-shadow: inset 3px 3px 6px rgba(0, 0, 0, 0.2), inset -3px -3px 6px rgba(0, 0, 0, 0.2); /* sombras suaves en tonos azules */
+        background: linear-gradient(135deg, #e85d04, #f48c06);
+        box-shadow: inset 3px 3px 6px #dc580380, inset -3px -3px 6px #e67e0780;
         color: white;
       }
-
       
       .btn-sidebar.pulse {
         animation: pulse 0.5s;
@@ -228,30 +204,15 @@ ui <- page_sidebar(
       }
       
       .card-header.bg-primary {
-  background-color: #039be5 !important; /* azul celeste */
-}
-
-.card-header.bg-secondary {
-  background-color: #29b6f6 !important; /* celeste claro */
-}
-
-.card {
-  background-color: #ffffff; /* o el que prefieras */
-  /* otros estilos si quieres */
-}
-
-body {
-  background-color: #ffffff; /* tono naranja claro para todo el fondo */
-}
-
-/* Fondo del sidebar en tono naranja más intenso */
-.sidebar {
-  background-color: #fb8c00 !important; /* naranja fuerte y vibrante */
-}
+        background-color: #e85d04 !important;
+      }
+      
+      .card-header.bg-secondary {
+        background-color: #f48c06 !important;
+      }
     "))
   ),
-  div(
-    style = "overflow-y: hidden; margin-top: 5px; flex: 1; display: flex; flex-direction: column; height: 100vh",
+  
   # Contenido principal con efecto de transición
   tags$style(HTML("
     #contenido_dinamico .card {
@@ -268,7 +229,6 @@ body {
   ")),
   
   uiOutput("contenido_dinamico")
-  )
 )
 
 server <- function(input, output, session) {
@@ -289,7 +249,8 @@ server <- function(input, output, session) {
   observeEvent(input$btn_segunda, {
     
     active_page("segunda")
-    # toggle_sidebar(id = "el_side", open ="closed", session = session)
+    # updateTabsetPanel(session, "el_side", open = "closed") 
+    toggle_sidebar(id = "el_side", open ="closed", session = session)
     
     
   })
@@ -297,20 +258,22 @@ server <- function(input, output, session) {
   
   
   output$la_primera <- renderUI({
-
-    
-    
-    img_path01 <- paste0("www", "/", "logo_01_unc_master.png")
-    img_path02 <- paste0("www", "/", "logo_02_fcefyn_master.png")
-    img_path03 <- paste0("www", "/", "logo_03_efadoc_master.png")
-    img_path04 <- paste0("www", "/", "logo_04_rscience_master.png")
-    
-    # print(img_path01)
-    # print(file.exists(img_path01))
-    
-    div( 
+    div(
       card(
-        height = "50%",
+        height = 200,
+        card_header(
+          "Dashboard Principal",
+          class = "bg-primary text-white"
+        ),
+        card_body(
+          div(
+            style = "display: flex; justify-content: center; align-items: center; height: 100%;",
+            h3("Bienvenido al Dashboard")
+          )
+        )
+      ),
+      card(
+        height = 200,
         card_header(
           "Dashboard Principal",
           class = "bg-primary text-white"
@@ -321,114 +284,31 @@ server <- function(input, output, session) {
             
             # Primera fila: 2 imágenes
             fluidRow(
-              style = "height: 50%;",  # Cada fila ocupa el 50% del alto del card
               column(
                 width = 6,
-                style = "height: 100%;",  # Cada columna ocupa el 100% del alto de la fila
-                tags$img(src = img_path01, style = "width: 100%; height: 100%; object-fit: contain;")
+                tags$img(src = "logo_01_unc_master.png", style = "width: 100%; max-height:250px; object-fit: contain;")
               ),
               column(
                 width = 6,
-                style = "height: 100%;",
-                tags$img(src = img_path02, style = "width: 100%; height: 100%; object-fit: contain;")
+                tags$img(src = "logo_02_fcefyn_master.png", style = "width: 100%; max-height:250px; object-fit: contain;")
               )
             ),
             
             # Segunda fila: otras 2 imágenes
             fluidRow(
-              style = "height: 50%;",
               column(
                 width = 6,
-                style = "height: 100%;",
-                tags$img(src = img_path03, style = "width: 100%; height: 100%; object-fit: contain;")
+                tags$img(src = "logo_03_efadoc_master.png", style = "width: 100%; max-height:250px; object-fit: contain;")
               ),
               column(
                 width = 6,
-                style = "height: 100%;",
-                tags$img(src = img_path04, style = "width: 100%; height: 100%; object-fit: contain;")
+                tags$img(src = "logo_04_rscience_master.png", style = "width: 100%; max-height:250px; object-fit: contain;")
               )
             )
+            
           )
         )
       )
-      ,
-      div(
-        tags$head(
-          tags$style(HTML("
-      .carousel-container {
-        width: 100%;
-        overflow: hidden;
-        white-space: nowrap;
-      }
-      .carousel {
-        display: inline-block;
-        white-space: nowrap;
-        animation: moveSlideshow 60s linear infinite;
-      }
-      .carousel img {
-        display: inline-block;
-        height: 150px;
-        margin-right: 20px;
-      }
-      
-      .carousel-container:hover .carousel {
-        animation-play-state: paused;
-      }
-
-      @keyframes moveSlideshow {
-        0% { transform: translateX(0); }
-        100% { transform: translateX(-50%); }
-      }
-    "))
-        ),
-        card(
-          height = "50%",
-          card_header(
-            "Dashboard Principal",
-            class = "bg-primary text-white"
-          ),
-          card_body(
-            div(class = "carousel-container",
-                div(class = "carousel",
-                    # Primer conjunto de imágenes
-                    tags$img(src = "www/logo_01_unc_master.png", height = "30px"),  # Imagen
-                    tags$img(src = "www/logo_02_fcefyn_master.png", height = "30px"),  # Imagen
-                    tags$img(src = "www/logo_03_efadoc_master.png", height = "30px"),  # Imagen
-                    tags$img(src = "www/logo_04_rscience_master.png", height = "30px"),  # Imagen,
-                    tags$img(src = "www/logo_05_UNT_master.png", height = "30px"),  # Imagen
-                    tags$img(src = "www/logo_06_CONICET_master.png", height = "30px"),  # Imagen
-                    tags$img(src = "www/logo_07_GULICH_master.png", height = "30px"),
-                    tags$img(src = "www/logo_08_NASA_master.png", height = "30px"),
-                    tags$img(src = "www/logo_09_UTN_master.png", height = "30px"),
-                    tags$img(src = "www/logo_10_INTA_master.png", height = "30px"),
-                    tags$img(src = "www/logo_11_CONAE_master.png", height = "30px"),
-                    tags$img(src = "www/logo_12_YPF_master.png", height = "30px"),
-                    tags$img(src = "www/logo_13_GOOGLE_master.png", height = "30px"),
-                    tags$img(src = "www/logo_14_OMS_master.png", height = "30px"),
-                    
-                    
-                    # Segundo conjunto de imágenes (duplicado)
-                    tags$img(src = "www/logo_01_unc_master.png", height = "30px"),  # Imagen
-                    tags$img(src = "www/logo_02_fcefyn_master.png", height = "30px"),  # Imagen
-                    tags$img(src = "www/logo_03_efadoc_master.png", height = "30px"),  # Imagen
-                    tags$img(src = "www/logo_04_rscience_master.png", height = "30px"),  # Imagen,
-                    tags$img(src = "www/logo_05_UNT_master.png", height = "30px"),  # Imagen
-                    tags$img(src = "www/logo_06_CONICET_master.png", height = "30px"),  # Imagen
-                    tags$img(src = "www/logo_07_GULICH_master.png", height = "30px"),
-                    tags$img(src = "www/logo_08_NASA_master.png", height = "30px"),
-                    tags$img(src = "www/logo_09_UTN_master.png", height = "30px"),
-                    tags$img(src = "www/logo_10_INTA_master.png", height = "30px"),
-                    tags$img(src = "www/logo_11_CONAE_master.png", height = "30px"),
-                    tags$img(src = "www/logo_12_YPF_master.png", height = "30px"),
-                    tags$img(src = "www/logo_13_GOOGLE_master.png", height = "30px"),
-                    tags$img(src = "www/logo_14_OMS_master.png", height = "30px")
-                    
-                )
-            )
-          )
-        )
-      )
-      
       
     )
   })

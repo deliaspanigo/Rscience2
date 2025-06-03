@@ -19,5 +19,6 @@ Imports:
     Rscience.import,
     Rscience.menu,
     shiny,
+    shinydashboardPlus,
     shinyjs,
     usethis
